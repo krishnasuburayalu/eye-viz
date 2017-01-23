@@ -32,7 +32,7 @@
 			$this->col[] = ["label"=>"Name","name"=>"name"];
 			$this->col[] = ["label"=>"Url","name"=>"url"];
 			$this->col[] = ["label"=>"Slug","name"=>"slug"];
-			$this->col[] = ["label"=>"Standard","name"=>"id_standards","join"=>"standards,id,name"];
+			$this->col[] = ["label"=>"Standard","name"=>"id_standards","join"=>"standards,id"];
 			$this->col[] = ["label"=>"Notes","name"=>"notes"];
 			$this->col[] = ["label"=>"Created By","name"=>"id_cms_users","join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Created On","name"=>"created_on","callback_php"=>'date("F d Y",strtotime($row->created_on))'];

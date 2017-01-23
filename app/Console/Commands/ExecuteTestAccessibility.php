@@ -5,6 +5,7 @@ use Session;
 use Request;
 use DB;
 use Illuminate\Console\Command;
+use Exception;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -19,7 +20,7 @@ class ExecuteTestAccessibility extends Command
      *
      * @var string
      */
-    protected $signature = 'at:run {execution_id : Execution Id} {--d|debug=false}';
+    protected $signature = 'at:run {site_id : Site Id} {--d|debug=false}';
 
     /**
      * The console command description.
@@ -45,9 +46,14 @@ class ExecuteTestAccessibility extends Command
      */
     public function handle()
     {
-        $execution = ExecutionHelper::begin_execution(1);
+        $site_id = $this->argument('site_id');
+        $execition_id = ExecutionHelper::get_execution_id($site_id);
+        if(!$execition_id){
+             throw new Exception('Execution failed:: No valid execution Id found');
+        }
+        $execution = ExecutionHelper::begin_execution($execition_id);
         if(!$execution){
-           return false;
+            throw new Exception('Execution failed...');
         }
     }
 }

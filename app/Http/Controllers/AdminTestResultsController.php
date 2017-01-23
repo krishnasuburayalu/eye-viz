@@ -10,52 +10,53 @@ use Session;
         public function __construct()
         {
 
-            # START CONFIGURATION DO NOT REMOVE THIS LINE
-            $this->title_field = "id";
-            $this->limit = "20";
-            $this->orderby = "id,desc";
-            $this->global_privilege = false;
-            $this->button_table_action = true;
-            $this->button_action_style = "button_icon";
-            $this->button_add = false;
-            $this->button_edit = false;
-            $this->button_delete = true;
-            $this->button_detail = true;
-            $this->button_show = true;
-            $this->button_filter = true;
-            $this->button_import = true;
-            $this->button_export = true;
-            $this->table = "test_results";
-            # END CONFIGURATION DO NOT REMOVE THIS LINE
+			# START CONFIGURATION DO NOT REMOVE THIS LINE
+			$this->title_field = "id";
+			$this->limit = "20";
+			$this->orderby = "id,desc";
+			$this->global_privilege = false;
+			$this->button_table_action = true;
+			$this->button_action_style = "button_icon";
+			$this->button_add = false;
+			$this->button_edit = false;
+			$this->button_delete = true;
+			$this->button_detail = true;
+			$this->button_show = true;
+			$this->button_filter = true;
+			$this->button_import = true;
+			$this->button_export = true;
+			$this->table = "test_results";
+			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
-            # START COLUMNS DO NOT REMOVE THIS LINE
-            $this->col = [];
-            $this->col[] = ["label"=>"Execution","name"=>"id_execution","join"=>"execution,notes"];
-            $this->col[] = ["label"=>"Sites","name"=>"id_sites","join"=>"sites,name"];
-            $this->col[] = ["label"=>"Url","name"=>"url"];
-            $this->col[] = ["label"=>"Type","name"=>"type"];
-            $this->col[] = ["label"=>"Code","name"=>"code"];
-            $this->col[] = ["label"=>"Message","name"=>"message","callback_php"=>'htmlentities($row->message)'];
-            # END COLUMNS DO NOT REMOVE THIS LINE
+			# START COLUMNS DO NOT REMOVE THIS LINE
+			$this->col = [];
+			$this->col[] = ["label"=>"Execution","name"=>"id_execution"];
+			$this->col[] = ["label"=>"Notes","name"=>"id_execution","join"=>"execution,notes"];
+			$this->col[] = ["label"=>"Sites","name"=>"id_sites","join"=>"sites,name"];
+			$this->col[] = ["label"=>"Url","name"=>"url"];
+			$this->col[] = ["label"=>"Type","name"=>"type"];
+			$this->col[] = ["label"=>"Code","name"=>"code"];
+			$this->col[] = ["label"=>"Message","name"=>"message","callback_php"=>'htmlentities($row->message)'];
+			# END COLUMNS DO NOT REMOVE THIS LINE
 
-            # START FORM DO NOT REMOVE THIS LINE
-            $this->form = [];
-            $this->form[] = ["label"=>"Execution","name"=>"id_execution","type"=>"select2","validation"=>"required|integer|min:0","width"=>"col-sm-10","datatable"=>"execution,id"];
-            $this->form[] = ["label"=>"Sites","name"=>"id_sites","type"=>"select2","validation"=>"required|integer|min:0","width"=>"col-sm-10","datatable"=>"sites,name"];
-            $this->form[] = ["label"=>"Url","name"=>"url","type"=>"text","validation"=>"required|url","width"=>"col-sm-10","placeholder"=>"Please enter a valid URL"];
-            $this->form[] = ["label"=>"Standard","name"=>"standard","type"=>"text","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
-            $this->form[] = ["label"=>"Type","name"=>"type","type"=>"text","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
-            $this->form[] = ["label"=>"Code","name"=>"code","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
-            $this->form[] = ["label"=>"Context","name"=>"context","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
-            $this->form[] = ["label"=>"Message","name"=>"message","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
-            $this->form[] = ["label"=>"Selector","name"=>"selector","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
-            $this->form[] = ["label"=>"Typecode","name"=>"typecode","type"=>"number","validation"=>"required|integer|min:0","width"=>"col-sm-10"];
-            $this->form[] = ["label"=>"Is Active","name"=>"is_active","type"=>"radio","validation"=>"required|integer","width"=>"col-sm-10","dataenum"=>"Array"];
-            $this->form[] = ["label"=>"Created On","name"=>"created_on","type"=>"datetime","validation"=>"required|date_format:Y-m-d H:i:s","width"=>"col-sm-10"];
-            $this->form[] = ["label"=>"Updated On","name"=>"updated_on","type"=>"datetime","validation"=>"required|date_format:Y-m-d H:i:s","width"=>"col-sm-10"];
-            # END FORM DO NOT REMOVE THIS LINE
+			# START FORM DO NOT REMOVE THIS LINE
+			$this->form = [];
+			$this->form[] = ["label"=>"Execution","name"=>"id_execution","type"=>"select2","validation"=>"required|integer|min:0","width"=>"col-sm-10","datatable"=>"execution,id"];
+			$this->form[] = ["label"=>"Sites","name"=>"id_sites","type"=>"select2","validation"=>"required|integer|min:0","width"=>"col-sm-10","datatable"=>"sites,name"];
+			$this->form[] = ["label"=>"Url","name"=>"url","type"=>"text","validation"=>"required|url","width"=>"col-sm-10","placeholder"=>"Please enter a valid URL"];
+			$this->form[] = ["label"=>"Standard","name"=>"standard","type"=>"text","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Type","name"=>"type","type"=>"text","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Code","name"=>"code","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Context","name"=>"context","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Message","name"=>"message","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Selector","name"=>"selector","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Typecode","name"=>"typecode","type"=>"number","validation"=>"required|integer|min:0","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Is Active","name"=>"is_active","type"=>"radio","validation"=>"required|integer","width"=>"col-sm-10","dataenum"=>"Array"];
+			$this->form[] = ["label"=>"Created On","name"=>"created_on","type"=>"datetime","validation"=>"required|date_format:Y-m-d H:i:s","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Updated On","name"=>"updated_on","type"=>"datetime","validation"=>"required|date_format:Y-m-d H:i:s","width"=>"col-sm-10"];
+			# END FORM DO NOT REMOVE THIS LINE
 
-            /*
+			/*
             | ----------------------------------------------------------------------
             | Sub Module
             | ----------------------------------------------------------------------
@@ -129,7 +130,11 @@ use Session;
             | @color = Default is none. You can use bootstrap success,info,warning,danger,primary.
             |
             */
-            $this->table_row_color = array();
+            $this->table_row_color = array(
+              array("condition"=>"[type] == 'error'","color"=>"danger"),
+              array("condition"=>"[type] == 'warning'","color"=>"warning"),
+
+            );
 
 
             /*
@@ -206,7 +211,7 @@ use Session;
         */
         public function hook_row_index($column_index, &$column_value)
         {
-            if ($column_index==4) {
+            if ($column_index==5) {
                 if ($column_value == 'error') {
                     $column_value = '<span class="label label-danger"> Error </span>';
                 } elseif ($column_value == 'warning') {
@@ -218,7 +223,7 @@ use Session;
                 }
             }
 
-						if ($column_index==3) {
+						if ($column_index==4) {
                 $column_value = '<a href="'.$column_value.'" target="_blank"> '.$column_value.'</a>';
             }
             //Your code here

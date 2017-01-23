@@ -33,6 +33,20 @@ class RunAccessibilityTests implements ShouldQueue
      */
     public function handle()
     {
-         ExecutionHelper::run_test($this->test_data);
+        $action = array_get($this->test_data, 'action', ExecutionHelper::QUEUE_ACTION_DUMMY);
+        switch($action){
+            case ExecutionHelper::QUEUE_ACTION_DUMMY:
+              return true;
+            break;
+            case ExecutionHelper::QUEUE_ACTION_DEFAULT:
+              ExecutionHelper::run_test($this->test_data);
+             break;
+            case ExecutionHelper::QUEUE_ACTION_AFTER:
+              ExecutionHelper::update_execution_stats($this->test_data);
+            break;
+            default:
+              return true;
+        }
+
     }
 }
