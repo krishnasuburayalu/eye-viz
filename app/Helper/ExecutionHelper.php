@@ -115,7 +115,9 @@ class ExecutionHelper extends Helper
         }
       //get standard form job
       $command = '/usr/local/bin/pa11y';
-      if($config || !empty($config)){ $command .= ' --config '.storage_path().'/app/'.$config; }
+      if($config || !empty($config)) { 
+        $command .= ' --config '.storage_path().'/app/'.$config; 
+      }
       $command .= ' --reporter json  '.  $url;
       
      $process = new Process($command);
