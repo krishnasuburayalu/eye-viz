@@ -8,6 +8,7 @@ use App\Model\TestResults;
 use App\Model\Sites;
 use Carbon\Carbon;
 use Exception;
+use Storage;
 
 use App\Jobs\RunAccessibilityTests;
 use Symfony\Component\Process\Process;
@@ -58,9 +59,11 @@ class ExecutionHelper extends Helper
            if ($url->url || !empty($url->url)) {
                $data['action'] = ExecutionHelper::QUEUE_ACTION_DEFAULT;
                $data['url'] = $url->url;
+               if($url->config || !empty($url->config)){$data['config'] = $url->config;}
                $data['site_id'] = $sites->id;
                $data['standard'] = $standard;
                $data['execution_id'] = $execution_id;
+
                dispatch(new RunAccessibilityTests($data));
                $url_count++;
            }
@@ -89,6 +92,10 @@ class ExecutionHelper extends Helper
        //get standard form job
       $standard = array_get($test_data, 'standard', ExecutionHelper::DEFAULT_STANDARD);
 
+      //get config from job
+      $config = str_random().'.json';
+      Storage::put($config, array_get($test_data, 'config', ExecutionHelper::DEFAULT_STANDARD));
+
       //get execution_id form job
      $execution_id = array_get($test_data, 'execution_id', null);
         if (!$execution_id) {
@@ -107,7 +114,12 @@ class ExecutionHelper extends Helper
             throw new Exception('Url not found');
         }
       //get standard form job
-     $process = new Process('/usr/local/bin/pa11y --standard '. $standard .' --reporter json  '.  $url);
+      $command = '/usr/local/bin/pa11y';
+      if($config || !empty($config)){ $command .= ' --config '.storage_path().'/app/'.$config; }
+      $command .= ' --reporter json  '.  $url;
+      
+     $process = new Process($command);
+     // $process = new Process('/usr/local/bin/pa11y --standard '. $standard .' --config'.$config.' --reporter json  '.  $url);
         $process->run();
         $result_raw = $process->getOutput();
         $results = json_decode($result_raw, true);
@@ -125,7 +137,9 @@ class ExecutionHelper extends Helper
           $res->typeCode = array_get($result, 'typeCode', null);
           $res->save();
         }
+        Storage::delete($config);
     }
+    
 
     //create execution ID and
     public static function get_execution_id($site_id = NULL){

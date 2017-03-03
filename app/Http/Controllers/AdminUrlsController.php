@@ -31,6 +31,7 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"Sites","name"=>"id_sites","join"=>"sites,name"];
 			$this->col[] = ["label"=>"Url","name"=>"url"];
+			$this->col[] = ["label"=>"Configuration","name"=>"config"];
 			$this->col[] = ["label"=>"Is Active","name"=>"is_active"];
 			$this->col[] = ["label"=>"Created By","name"=>"id_cms_users","join"=>"cms_users,name"];
 			$this->col[] = ["label"=>"Created On","name"=>"created_on"];
@@ -40,8 +41,9 @@
 			$this->form = [];
 			$this->form[] = ["label"=>"Sites","name"=>"id_sites","type"=>"select","validation"=>"required","width"=>"col-sm-9","dataquery"=>" SELECT id as value,name as label FROM `sites` where is_active=1 "];
 			$this->form[] = ["label"=>"Url","name"=>"url","type"=>"text","validation"=>"required|url","width"=>"col-sm-10"];
-			$this->form[] = ["label"=>"Is Active","name"=>"is_active","type"=>"select","validation"=>"","width"=>"col-sm-10"];
-			$this->form[] = ["label"=>"Created By","name"=>"id_cms_users","type"=>"select","validation"=>"required|integer|min:0","width"=>"col-sm-10","dataenum"=>"0|In-Active;1|Active"];
+			$this->form[] = ["label"=>"Configuration","name"=>"config","type"=>"textarea","validation"=>"","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Is Active","name"=>"is_active","type"=>"select","validation"=>"","width"=>"col-sm-10","dataenum"=>"0|In-Active;1|Active"];
+			$this->form[] = ["label"=>"Created By","name"=>"id_cms_users","type"=>"select","validation"=>"required|integer|min:0","width"=>"col-sm-10","datatable"=>"cms_users,name"];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			/*
