@@ -4,7 +4,7 @@
 	use Request;
 	use DB;
 	use CRUDBooster;
-
+  	
 	class AdminUrlsController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function __construct() {

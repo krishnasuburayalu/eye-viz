@@ -23,7 +23,7 @@
 			"file": "app/Helper/ExecutionHelper.php",
 			"settings":
 			{
-				"buffer_size": 7286,
+				"buffer_size": 7303,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -116,18 +116,6 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-		"/home/santhosh/devroot/eye-viz",
-		"/home/santhosh/devroot/eye-viz/app",
-		"/home/santhosh/devroot/eye-viz/app/Console",
-		"/home/santhosh/devroot/eye-viz/app/Console/Commands",
-		"/home/santhosh/devroot/eye-viz/app/Helper",
-		"/home/santhosh/devroot/eye-viz/app/Http",
-		"/home/santhosh/devroot/eye-viz/app/Http/Controllers",
-		"/home/santhosh/devroot/eye-viz/storage",
-		"/home/santhosh/devroot/eye-viz/storage/tmpfolders"
-	],
 	"file_history":
 	[
 		"/home/santhosh/devroot/eye-viz/storage/app/BuzVBZMMhHctW2r4.json",
@@ -234,15 +222,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7286,
+						"buffer_size": 7303,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4003,
-								4003
+								2865,
+								2865
 							]
 						],
 						"settings":
@@ -252,7 +240,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1802.0,
+						"translation.y": 1445.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
