@@ -14,5 +14,5 @@ class Helper
       $dt = Carbon::now();
       return $dt->toDayDateTimeString(); // Sat, Dec 19, 2015 10:10 AM
   }
-
+  
 }

@@ -37,6 +37,7 @@ use Session;
 			$this->col[] = ["label"=>"Type","name"=>"type"];
 			$this->col[] = ["label"=>"Code","name"=>"code"];
 			$this->col[] = ["label"=>"Message","name"=>"message","callback_php"=>'htmlentities($row->message)'];
+			$this->col[] = ["label"=>"Screenshot","name"=>"screenshot"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -50,8 +51,9 @@ use Session;
 			$this->form[] = ["label"=>"Context","name"=>"context","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Message","name"=>"message","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Selector","name"=>"selector","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Screenshot","name"=>"screenshot","type"=>"text","validation"=>"str|string","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Typecode","name"=>"typecode","type"=>"number","validation"=>"required|integer|min:0","width"=>"col-sm-10"];
-			$this->form[] = ["label"=>"Is Active","name"=>"is_active","type"=>"radio","validation"=>"required|integer","width"=>"col-sm-10","dataenum"=>"Array"];
+			$this->form[] = ["label"=>"Is Active","name"=>"is_active","type"=>"radio","validation"=>"required|integer","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Created On","name"=>"created_on","type"=>"datetime","validation"=>"required|date_format:Y-m-d H:i:s","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Updated On","name"=>"updated_on","type"=>"datetime","validation"=>"required|date_format:Y-m-d H:i:s","width"=>"col-sm-10"];
 			# END FORM DO NOT REMOVE THIS LINE

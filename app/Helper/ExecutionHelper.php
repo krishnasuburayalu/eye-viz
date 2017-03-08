@@ -1,4 +1,6 @@
-<?php namespace App\Helper;
+<?php 
+namespace App\Helper;
+
 use Session;
 use Request;
 use DB;
@@ -9,6 +11,9 @@ use App\Model\Sites;
 use Carbon\Carbon;
 use Exception;
 use Storage;
+
+use JonnyW\PhantomJs\Client;
+use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
 
 use App\Jobs\RunAccessibilityTests;
 use Symfony\Component\Process\Process;
@@ -137,6 +142,8 @@ class ExecutionHelper extends Helper
           $res->selector = array_get($result, 'selector', null);
           $res->type = array_get($result, 'type', null);
           $res->typeCode = array_get($result, 'typeCode', null);
+
+          $res->screenshot = \App\Helper\ExecutionHelper::captureElement($res->url, $res->selector);
           $res->save();
         }
         Storage::delete($config);
@@ -213,5 +220,52 @@ class ExecutionHelper extends Helper
       return true;
     }
 
+    public static function captureElement($url, $xpath){
+        $partialData = \App\Helper\ExecutionHelper::writePartial($url, $xpath);
+
+        $location = storage_path().'/app/procs/';
+        
+        $serviceContainer = ServiceContainer::getInstance();
+    
+        $procedureLoader = $serviceContainer->get('procedure_loader_factory')
+            ->createProcedureLoader($location);
+        $client = Client::getInstance();
+        $client->setProcedure($partialData['proc']);
+        $client->getProcedureLoader()->addLoader($procedureLoader);
+        $request  = $client->getMessageFactory()->createRequest();
+        $response = $client->getMessageFactory()->createResponse();
+
+        $client->send($request, $response);
+        Storage::delete('/procs/'.$partialData['proc'].'.proc');
+        return $partialData['image'];
+    }
+
+    public static function writePartial($url, $xpath){
+
+        $imagefilename = 'app/'.str_random().'.jpg';
+        $procname = str_random();
+        $filecontent = "// $procname.proc
+
+        var page = require('webpage').create();
+        page.settings.userAgent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36';
+        page.viewportSize = { width: 1280, height: 720 };
+        page.open('".$url."', function(status) {
+            if (status !== 'success') {
+                console.log('Unable to load the address!');
+                phantom.exit();
+            }else{
+                scrollpsn = page.evaluate(function(){
+                    return document.querySelector(\"".$xpath."\").setAttribute('style', document.querySelector(\"".$xpath."\").getAttribute('style') + 'border-color: yellow;border-style: dashed;border-width: 2px;');
+                }); 
+                page.render('". storage_path().'/'.$imagefilename ."');
+            }
+            phantom.exit();
+        });";
+
+        Storage::put('/procs/'.$procname.'.proc', $filecontent);
+        return ['proc' => $procname,
+                'image' => '<a href=\''.Storage::url($imagefilename).'\'>image</a>'];
+                // 'image' => Storage::url($imagefilename)];
+    }
 
 }
