@@ -7,8 +7,9 @@
     "require": {
         "php": ">=5.6.4",
         "crocodicstudio/crudbooster": "5.3.0.*",
+        "jonnyw/php-phantomjs": "^4.5",
         "laravel/framework": "5.3.*",
-        "jonnyw/php-phantomjs": "^4.5"
+        "santhoshjanan/codesnifferdoc": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

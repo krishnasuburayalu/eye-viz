@@ -1,9 +1,10 @@
 <?php namespace App\Http\Controllers;
 
 use Session;
-    use Request;
-    use DB;
-    use CRUDBooster;
+use Request;
+use DB;
+use CRUDBooster;
+use CSDHelper\CodeSniffDoc;
 
     class AdminTestResultsController extends \crocodicstudio\crudbooster\controllers\CBController
     {
@@ -225,8 +226,12 @@ use Session;
                 }
             }
 
-						if ($column_index==4) {
+			if ($column_index==4) {
                 $column_value = '<a href="'.$column_value.'" target="_blank"> '.$column_value.'</a>';
+            }
+
+            if($column_index == 6){
+                $column_value = '<a href="'.CodeSniffDoc::GetCodeSnifferPage($column_value).'" target="_blank" data-toggle="tooltip" title="">'.$column_value.'</a>';
             }
             //Your code here
         }

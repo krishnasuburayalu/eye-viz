@@ -43,10 +43,10 @@
 			$this->form[] = ["label"=>"Name","name"=>"name","type"=>"text","validation"=>"required|string|min:3|max:70","width"=>"col-sm-10","placeholder"=>"You can only enter the letter only"];
 			$this->form[] = ["label"=>"Url","name"=>"url","type"=>"text","validation"=>"required|url","width"=>"col-sm-10","placeholder"=>"Please enter a valid URL"];
 			$this->form[] = ["label"=>"Slug","name"=>"slug","type"=>"text","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
-			$this->form[] = ["label"=>"Standard","name"=>"standard","type"=>"select","validation"=>"required|integer|min:0","width"=>"col-sm-10","dataquery"=>" SELECT id as value,name as label FROM `standards` where is_active=1 "];
+			$this->form[] = ["label"=>"Standard","name"=>"id_standards","type"=>"select","validation"=>"required|integer|min:0","width"=>"col-sm-10","dataquery"=>" SELECT id as value,name as label FROM `standards` where is_active=1 "];
 			$this->form[] = ["label"=>"Notes","name"=>"notes","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Created By","name"=>"id_cms_users","type"=>"select","validation"=>" ","width"=>"col-sm-10","dataquery"=>"SELECT id as value,name as label FROM `cms_users` where status='Active'"];
-			$this->form[] = ["label"=>"Is Active","name"=>"is_active","type"=>"select","validation"=>"required","width"=>"col-sm-9"];
+			$this->form[] = ["label"=>"Is Active","name"=>"is_active","type"=>"select","validation"=>"required","width"=>"col-sm-9","dataenum"=>"0|In-Active;1|Active"];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			/* 
