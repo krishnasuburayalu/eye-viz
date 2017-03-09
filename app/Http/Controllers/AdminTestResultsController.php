@@ -233,6 +233,10 @@ use CSDHelper\CodeSniffDoc;
             if($column_index == 6){
                 $column_value = '<a href="'.CodeSniffDoc::GetCodeSnifferPage($column_value).'" target="_blank" data-toggle="tooltip" title="">'.$column_value.'</a>';
             }
+
+            if($column_index == 8){
+                $column_value = '<a href="'.$column_value.'" target="_blank" data-toggle="tooltip" title="'.$column_value.'">'.Image.'</a>';
+            }
             //Your code here
         }
 

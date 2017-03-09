@@ -21,7 +21,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ExecutionHelper extends Helper
 {
-    const DEFAULT_STANDARD = 'Section508';
+    const DEFAULT_STANDARD = '{ "standard": "WCAG2AA"}';
     const QUEUE_ACTION_BEFORE = 0;// do this action at first
     const QUEUE_ACTION_DEFAULT = 1; //run the test
     const QUEUE_ACTION_DUMMY = 2; //just use this for dummy job, dont do anything
@@ -143,7 +143,7 @@ class ExecutionHelper extends Helper
           $res->type = array_get($result, 'type', null);
           $res->typeCode = array_get($result, 'typeCode', null);
 
-          $res->screenshot = \App\Helper\ExecutionHelper::captureElement($res->url, $res->selector);
+          $res->screenshot = \App\Helper\ExecutionHelper::captureElement($res);
           $res->save();
         }
         Storage::delete($config);
@@ -220,8 +220,12 @@ class ExecutionHelper extends Helper
       return true;
     }
 
-    public static function captureElement($url, $xpath){
-        $partialData = \App\Helper\ExecutionHelper::writePartial($url, $xpath);
+    public static function captureElement($resource = NULL){
+        if(!$resource){
+          return false;
+        }
+        
+        $partialData = \App\Helper\ExecutionHelper::writePartial($resource);
 
         $location = storage_path().'/app/procs/';
         
@@ -240,31 +244,42 @@ class ExecutionHelper extends Helper
         return $partialData['image'];
     }
 
-    public static function writePartial($url, $xpath){
+    public static function writePartial($resource = NULL){
+        if(!$resource){
+          return false;
+        }
 
-        $imagefilename = 'app/'.str_random().'.jpg';
+        $imagefilename = 'app/screenshots/'.str_random().'.jpg';
         $procname = str_random();
         $filecontent = "// $procname.proc
 
         var page = require('webpage').create();
         page.settings.userAgent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36';
         page.viewportSize = { width: 1280, height: 720 };
-        page.open('".$url."', function(status) {
+        page.open('".$resource->url."', function(status) {
             if (status !== 'success') {
                 console.log('Unable to load the address!');
                 phantom.exit();
             }else{
+              // setTimeout(function() {
                 scrollpsn = page.evaluate(function(){
-                    return document.querySelector(\"".$xpath."\").setAttribute('style', document.querySelector(\"".$xpath."\").getAttribute('style') + 'border-color: yellow;border-style: dashed;border-width: 2px;');
+                    return document.body.innerHTML = '<div style=\"position: absolute;z-index: 10;background: rgba(0,0,0,.2); top:'+(document.querySelector(\"".$resource->selector."\").getBoundingClientRect().top+80) +'px; left:'+document.querySelector(\"".$resource->selector."\").getBoundingClientRect().left+'px\"><h4 style=\"width: 100%; vertical-align: top;\">".addslashes($resource->message)."</h4></div>'+document.body.innerHTML;
+
+                });
+
+                scrollpsn = page.evaluate(function(){
+                    return document.querySelector(\"".$resource->selector."\").setAttribute('style', document.querySelector(\"".$resource->selector."\").getAttribute('style') + ';border-color: #FFAAAA; border-style: dashed; border-width: 3px;');
                 }); 
                 page.render('". storage_path().'/'.$imagefilename ."');
+              // }, 1000);
+
             }
             phantom.exit();
         });";
 
         Storage::put('/procs/'.$procname.'.proc', $filecontent);
         return ['proc' => $procname,
-                'image' => '<a href=\''.Storage::url($imagefilename).'\'>image</a>'];
+                'image' => Storage::url($imagefilename)];
                 // 'image' => Storage::url($imagefilename)];
     }
 
