@@ -4,7 +4,14 @@ use Session;
 use Request;
 use DB;
 use CRUDBooster;
+use App\Model\TestResults;
 use CSDHelper\CodeSniffDoc;
+
+/**
+ * All for overriding the get detail function
+ */
+use Illuminate\Support\Facades\Route;
+
 
     class AdminTestResultsController extends \crocodicstudio\crudbooster\controllers\CBController
     {
@@ -52,7 +59,7 @@ use CSDHelper\CodeSniffDoc;
 			$this->form[] = ["label"=>"Context","name"=>"context","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Message","name"=>"message","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Selector","name"=>"selector","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
-			$this->form[] = ["label"=>"Screenshot","name"=>"screenshot","type"=>"text","validation"=>"str|string","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Screenshot","name"=>"screenshot","type"=>"wysiwyg","validation"=>"str|string","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Typecode","name"=>"typecode","type"=>"number","validation"=>"required|integer|min:0","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Is Active","name"=>"is_active","type"=>"radio","validation"=>"required|integer","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Created On","name"=>"created_on","type"=>"datetime","validation"=>"required|date_format:Y-m-d H:i:s","width"=>"col-sm-10"];
@@ -317,7 +324,30 @@ use CSDHelper\CodeSniffDoc;
             //Your code here
         }
 
+        /**
+         * [getDetail overriding from $this base]
+         * @param  [type] $id [description]
+         * @return [type]     [description]
+         */
+         public function getDetail($id)  {
+            $row = DB::table($this->table)->where($this->primary_key,$id)->first();  
 
+            if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_detail==FALSE) {           
+                CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));
+                CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));         
+            }
+
+            $module     = CRUDBooster::getCurrentModule();      
+                
+            $page_menu  = Route::getCurrentRoute()->getActionName();        
+            $page_title = trans("crudbooster.detail_data_page_title",['module'=>$module->name,'name'=>$row->{$this->title_field}]);             
+            $command    = 'detail';     
+
+            Session::put('current_row_id',$id);
+
+            $row->screenshot = '<a href="'.$row->screenshot.'" target="_blank"><img src="'.$row->screenshot.'" class="img-responsive" style="max-height:480px"/></a>';
+            return view('crudbooster::default.form',compact('row','page_menu','page_title','command'));
+        }
 
         //By the way, you can still create your own method in here... :)
     }
