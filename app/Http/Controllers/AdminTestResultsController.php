@@ -56,7 +56,7 @@ use Illuminate\Support\Facades\Route;
 			$this->form[] = ["label"=>"Standard","name"=>"standard","type"=>"text","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Type","name"=>"type","type"=>"text","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Code","name"=>"code","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
-			$this->form[] = ["label"=>"Context","name"=>"context","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Context","name"=>"context","type"=>"hidden","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Message","name"=>"message","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Selector","name"=>"selector","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Screenshot","name"=>"screenshot","type"=>"wysiwyg","validation"=>"str|string","width"=>"col-sm-10"];
