@@ -238,14 +238,14 @@ use Illuminate\Support\Facades\Route;
             }
 
             if($column_index == 6){
-                $column_value = '<a href="'.CodeSniffDoc::GetCodeSnifferPage($column_value).'" target="_blank" data-toggle="tooltip" title="">'.$column_value.'</a>';
+                $column_value = '<a href="'.CodeSniffDoc::GetCodeSnifferPage($column_value).'" target="_blank" data-toggle="tooltip" title="Click this link to view details of this error code.">'.$column_value.'</a>';
             }
 
             if($column_index == 8){
                 if(empty($column_value)){
-                    $column_value = "<i>In-queue</i>";
+                    $column_value = '<i data-toggle="tooltip" title="Screenshot process is running in queue. Please refresh this page in a few seconds to see the link.">In-queue</i>';
                 }else{
-                    $column_value = '<a href="'.$column_value.'" target="_blank" data-toggle="tooltip" title="'.$column_value.'">'.Image.'</a>';
+                    $column_value = '<a href="'.$column_value.'" target="_blank" data-toggle="tooltip" title="Click this link to open related screenshot.">'.Image.'</a>';
                 }
             }
             //Your code here
@@ -329,7 +329,7 @@ use Illuminate\Support\Facades\Route;
          * @param  [type] $id [description]
          * @return [type]     [description]
          */
-         public function getDetail($id)  {
+        public function getDetail($id)  {
             $row = DB::table($this->table)->where($this->primary_key,$id)->first();  
 
             if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_detail==FALSE) {           
@@ -338,7 +338,7 @@ use Illuminate\Support\Facades\Route;
             }
 
             $module     = CRUDBooster::getCurrentModule();      
-                
+
             $page_menu  = Route::getCurrentRoute()->getActionName();        
             $page_title = trans("crudbooster.detail_data_page_title",['module'=>$module->name,'name'=>$row->{$this->title_field}]);             
             $command    = 'detail';     
