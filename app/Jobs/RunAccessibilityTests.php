@@ -44,6 +44,12 @@ class RunAccessibilityTests implements ShouldQueue
             case ExecutionHelper::QUEUE_ACTION_AFTER:
               ExecutionHelper::update_execution_stats($this->test_data);
             break;
+            case ExecutionHelper::QUEUE_CAPTURE_SCREEN:
+                $resource = array_get($this->test_data, 'resource', null);
+                if($resource){      
+                    ExecutionHelper::capture_screen_queue($resource);
+                }
+                break;
             default:
               return true;
         }

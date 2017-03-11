@@ -25,9 +25,14 @@ class ExecutionHelper extends Helper
     const QUEUE_ACTION_BEFORE = 0;// do this action at first
     const QUEUE_ACTION_DEFAULT = 1; //run the test
     const QUEUE_ACTION_DUMMY = 2; //just use this for dummy job, dont do anything
-    const QUEUE_ACTION_AFTER = 3;// do this action at last
+    const QUEUE_ACTION_AFTER = 3;// do this action after running an execution
+    const QUEUE_CAPTURE_SCREEN = 4;// do this action at last
 
-    // begin execution collect site urls from execution id
+    /**
+     * begin execution collect site urls from execution id
+     * @param  [type] $execution_id [description]
+     * @return [type]               [description]
+     */
     public static function begin_execution($execution_id = null)
     {
         if (!$execution_id) {
@@ -88,8 +93,12 @@ class ExecutionHelper extends Helper
        return true;
     }
 
-    public static function run_test($test_data = null)
-    {
+    /**
+     * run_test executes tests
+     * @param  [type] $test_data [description]
+     * @return [type]            [description]
+     */
+    public static function run_test($test_data = null){
         //run job
       if (!$test_data) {
           throw new Exception('Test data not found');
@@ -143,14 +152,23 @@ class ExecutionHelper extends Helper
           $res->type = array_get($result, 'type', null);
           $res->typeCode = array_get($result, 'typeCode', null);
 
-          $res->screenshot = \App\Helper\ExecutionHelper::captureElement($res);
+          //$res->screenshot = \App\Helper\ExecutionHelper::captureElement($res);
           $res->save();
+
+            $data = array();
+            $data['action'] = ExecutionHelper::QUEUE_CAPTURE_SCREEN;
+            $data['resource'] = $res;
+            dispatch(new RunAccessibilityTests($data));
         }
         Storage::delete($config);
     }
     
 
-    //create execution ID and
+    /**
+     * get_execution_id create execution ID
+     * @param  [type] $site_id [description]
+     * @return [type]          [description]
+     */
     public static function get_execution_id($site_id = NULL){
       if (!$site_id) {
           throw new Exception('Require valid site name/id');
@@ -173,6 +191,11 @@ class ExecutionHelper extends Helper
       return $execution->id;
     }
 
+    /**
+     * update_execution_stats delegates process of collecting stats of the execution
+     * @param  [type] $execution [description]
+     * @return [type]            [description]
+     */
     public static function update_execution_stats($execution = NULL){
       //get standard form job
      $execution_id = array_get($execution, 'execution_id',NULL);
@@ -220,12 +243,17 @@ class ExecutionHelper extends Helper
       return true;
     }
 
+    /**
+     * captureElement executes the phantom script to capture screen and posts to DB
+     * @param  [type] $resource [description]
+     * @return [type]           [description]
+     */
     public static function captureElement($resource = NULL){
         if(!$resource){
           return false;
         }
         
-        $partialData = \App\Helper\ExecutionHelper::writePartial($resource);
+        $partialData = \App\Helper\ExecutionHelper::writeProcedure($resource);
 
         $location = storage_path().'/app/procs/';
         
@@ -244,12 +272,16 @@ class ExecutionHelper extends Helper
         return $partialData['image'];
     }
 
-    public static function writePartial($resource = NULL){
+    /**
+     * writeProcedure Creates the phantomjs procedure for taking screenshot
+     * @param  [type] $resource [description]
+     * @return [type]           [description]
+     */
+    public static function writeProcedure($resource = NULL){
         if(!$resource){
           return false;
         }
-
-        $imagefilename = 'app/screenshots/'.str_random().'.jpg';
+        $imagefilename = 'app/screenshots/'.$resource->id_execution.'-'.$resource->id_sites.'-'.$resource->code.'-'.$resource->id.'.jpg';
         $procname = str_random();
         $filecontent = "// $procname.proc
 
@@ -283,6 +315,20 @@ class ExecutionHelper extends Helper
         return ['proc' => $procname,
                 'image' => Storage::url($imagefilename)];
                 // 'image' => Storage::url($imagefilename)];
+    }
+
+    /**
+     * capture_screen_queue delegates the screen capturing process to a queue.
+     * @param  [type] $capturedata  [description]
+     * @return [type]               [description]
+     */
+    public static function capture_screen_queue($capturedata = NULL){
+        $res = TestResults::find($capturedata->id);
+
+        $res->screenshot = \App\Helper\ExecutionHelper::captureElement($capturedata);
+        $res->save();
+
+        return true;
     }
 
 }

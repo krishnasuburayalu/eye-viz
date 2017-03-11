@@ -235,7 +235,11 @@ use CSDHelper\CodeSniffDoc;
             }
 
             if($column_index == 8){
-                $column_value = '<a href="'.$column_value.'" target="_blank" data-toggle="tooltip" title="'.$column_value.'">'.Image.'</a>';
+                if(empty($column_value)){
+                    $column_value = "<i>In-queue</i>";
+                }else{
+                    $column_value = '<a href="'.$column_value.'" target="_blank" data-toggle="tooltip" title="'.$column_value.'">'.Image.'</a>';
+                }
             }
             //Your code here
         }
