@@ -16,6 +16,8 @@ use JonnyW\PhantomJs\Client;
 use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
 
 use App\Jobs\RunAccessibilityTests;
+use App\Jobs\ScreenShotDaemon;
+
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -74,7 +76,7 @@ class ExecutionHelper extends Helper
                $data['standard'] = $standard;
                $data['execution_id'] = $execution_id;
 
-               dispatch(new RunAccessibilityTests($data));
+               dispatch((new RunAccessibilityTests($data))->onQueue('run_test'));
                $url_count++;
            }
        }
@@ -89,7 +91,7 @@ class ExecutionHelper extends Helper
        $data['site_id'] = $sites->id;
        $data['standard'] = $standard;
        $data['execution_id'] = $execution_id;
-       dispatch(new RunAccessibilityTests($data));
+       dispatch((new RunAccessibilityTests($data))->onQueue('collect_stats'));
        return true;
     }
 
@@ -158,7 +160,7 @@ class ExecutionHelper extends Helper
             $data = array();
             $data['action'] = ExecutionHelper::QUEUE_CAPTURE_SCREEN;
             $data['resource'] = $res;
-            dispatch(new RunAccessibilityTests($data));
+            dispatch((new ScreenShotDaemon($data))->onQueue('screenshots'));
         }
         Storage::delete($config);
     }
@@ -281,7 +283,7 @@ class ExecutionHelper extends Helper
         if(!$resource){
           return false;
         }
-        $imagefilename = 'app/screenshots/'.$resource->id_execution.'-'.$resource->id_sites.'-'.$resource->code.'-'.$resource->id.'.jpg';
+        $imagefilename = 'app/screenshots/'.$resource->id_execution.'-'.$resource->id_sites.'-'.$resource->code.'-'.$resource->id.'.jpeg';
         $procname = str_random();
         $filecontent = "// $procname.proc
 
@@ -304,7 +306,7 @@ class ExecutionHelper extends Helper
                 // scrollpsn = page.evaluate(function(){
                 //     return document.querySelector(\"".$resource->selector."\").setAttribute('style', document.querySelector(\"".$resource->selector."\").getAttribute('style') + ';border-color: #FF0000; border-style: dashed; border-width: 3px;');
                 // }); 
-                page.render('". storage_path().'/'.$imagefilename ."');
+                page.render('". storage_path().'/'.$imagefilename ."', {format: 'jpeg', quality: '40'});
               // }, 1000);
 
             }
