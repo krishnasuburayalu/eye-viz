@@ -91,7 +91,7 @@ class ExecutionHelper extends Helper
        $data['site_id'] = $sites->id;
        $data['standard'] = $standard;
        $data['execution_id'] = $execution_id;
-       dispatch((new RunAccessibilityTests($data))->onQueue('collect_stats'));
+       dispatch((new RunAccessibilityTests($data))->onQueue('test_run'));
        return true;
     }
 
