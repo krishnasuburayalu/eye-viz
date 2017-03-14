@@ -9,6 +9,7 @@
         "crocodicstudio/crudbooster": "5.3.0.*",
         "jonnyw/php-phantomjs": "^4.5",
         "laravel/framework": "5.3.*",
+        "pda/pheanstalk": "^3.1",
         "santhoshjanan/codesnifferdoc": "^1.0"
     },
     "require-dev": {
