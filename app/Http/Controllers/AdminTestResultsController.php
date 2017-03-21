@@ -13,7 +13,7 @@ use CSDHelper\CodeSniffDoc;
 use Illuminate\Support\Facades\Route;
 
 
-    class AdminTestResultsController extends \crocodicstudio\crudbooster\controllers\CBController
+    class AdminTestResultsController extends AdminBaseController
     {
         public function __construct()
         {
