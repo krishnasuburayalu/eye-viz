@@ -54,7 +54,7 @@ use Illuminate\Support\Facades\Route;
 			$this->form[] = ["label"=>"Sites","name"=>"id_sites","type"=>"select2","validation"=>"required|integer|min:0","width"=>"col-sm-10","datatable"=>"sites,name"];
 			$this->form[] = ["label"=>"Url","name"=>"url","type"=>"text","validation"=>"required|url","width"=>"col-sm-10","placeholder"=>"Please enter a valid URL"];
 			$this->form[] = ["label"=>"Standard","name"=>"standard","type"=>"text","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
-			$this->form[] = ["label"=>"Type","name"=>"type","type"=>"text","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
+			$this->form[] = ["label"=>"Type","name"=>"type","type"=>"wysiwyg","validation"=>"required|min:3|max:255","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Code","name"=>"code","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Context","name"=>"context","type"=>"hidden","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
 			$this->form[] = ["label"=>"Message","name"=>"message","type"=>"textarea","validation"=>"required|string|min:5|max:5000","width"=>"col-sm-10"];
@@ -344,6 +344,20 @@ use Illuminate\Support\Facades\Route;
             $command    = 'detail';     
 
             Session::put('current_row_id',$id);
+            
+            // if ($column_index==5) {
+                if ($row->type == 'error') {
+                    $row->type = '<span class="label label-danger"> Error </span>';
+                } elseif ($row->type == 'warning') {
+                    $row->type = '<span class="label label-warning"> Warning </span>';
+                } elseif ($row->type == 'notice') {
+                    $row->type = '<span class="label label-info"> Notice </span>';
+                } elseif ($row->type == 'none') {
+                    $row->type = '<span class="label label-success"> Success </span>';
+                }
+            // }
+
+            $row->code = '<a href="'.CodeSniffDoc::GetCodeSnifferPage($row->code).'" target="_blank" data-toggle="tooltip" title="Click this link to view details of this error code.">'.$row->code.'</a>';
 
             $row->screenshot = '<a href="'.$row->screenshot.'" target="_blank"><img src="'.$row->screenshot.'" class="img-responsive" style="max-height:480px"/></a>';
             return view('crudbooster::default.form',compact('row','page_menu','page_title','command'));
