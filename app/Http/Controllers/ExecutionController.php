@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Model\Execution;
 // use Illuminate\Console\Application as Artisan;
 use Artisan;
+use CRUDBooster;
 
 class ExecutionController extends Controller
 {
@@ -30,6 +31,7 @@ class ExecutionController extends Controller
       }
 
       Artisan::call('at:run', ['site_id'=>$id]);
-      return back();
+      
+      CRUDBooster::redirect('/admin/sites?m=3','Test has been initiated.','success');
     }
 }

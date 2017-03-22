@@ -16,10 +16,10 @@
 			$this->global_privilege = false;
 			$this->button_table_action = true;
 			$this->button_action_style = "button_icon";
-			$this->button_add = true;
-			$this->button_edit = true;
+			$this->button_add = false;
+			$this->button_edit = false;
 			$this->button_delete = true;
-			$this->button_detail = true;
+			$this->button_detail = false;
 			$this->button_show = true;
 			$this->button_filter = true;
 			$this->button_import = false;
@@ -76,6 +76,7 @@
 	        |
 	        */
 	        $this->addaction = array();
+			$this->addaction[] = ['icon'=>'fa fa-eye','color'=>'info','url'=>'test_results?filter_column[execution.notes][type]=%3D&filter_column[execution.notes][value]='.'[notes]'];
 
 
 	        /*

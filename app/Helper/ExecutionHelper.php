@@ -78,20 +78,20 @@ class ExecutionHelper extends Helper
 
                dispatch((new RunAccessibilityTests($data)));
                $url_count++;
+               //update pushed url counts to execution
+               Execution::where('id', $execution_id)->update(array('t_pushed' => $urls->count()));
+
+               //will add some dummy jobs later
+               //once all urls pushed into queue send job for stats collection
+               $data = array();
+               $data['action'] = ExecutionHelper::QUEUE_ACTION_AFTER;
+               $data['site_id'] = $sites->id;
+               $data['standard'] = $standard;
+               $data['execution_id'] = $execution_id;
+               dispatch((new RunAccessibilityTests($data)));
            }
        }
 
-       //update pushed url counts to execution
-       Execution::where('id', $execution_id)->update(array('t_pushed' => $urls->count()));
-
-       //will add some dummy jobs later
-       //once all urls pushed into queue send job for stats collection
-       $data = array();
-       $data['action'] = ExecutionHelper::QUEUE_ACTION_AFTER;
-       $data['site_id'] = $sites->id;
-       $data['standard'] = $standard;
-       $data['execution_id'] = $execution_id;
-       dispatch((new RunAccessibilityTests($data)));
        return true;
     }
 
@@ -299,7 +299,7 @@ class ExecutionHelper extends Helper
                 scrollpsn = page.evaluate(function(){
                   document.querySelector(\"".$resource->selector."\").setAttribute('style', document.querySelector(\"".$resource->selector."\").getAttribute('style') + ';border-color: #FF0000; border-style: dashed; border-width: 3px;');
 
-                    return document.body.innerHTML = '<div style=\"position: absolute;z-index: 9990;background: rgba(0,0,0,.9); max-width:480px; top:'+(document.querySelector(\"".$resource->selector."\").getBoundingClientRect().bottom) +'px; left:'+document.querySelector(\"".$resource->selector."\").getBoundingClientRect().left+'px\"><p style=\"width:100%;color:#FFF200;vertical-align: top;\">".addslashes($resource->message)."</p></div>'+document.body.innerHTML;
+                    return document.body.innerHTML = '<div style=\"position: absolute;z-index: 9990;background: rgba(0,0,0,.9); max-width:480px; top:'+(document.querySelector(\"".$resource->selector."\").getBoundingClientRect().bottom) +'px; left:'+document.querySelector(\"".$resource->selector."\").getBoundingClientRect().left+'px\"><p style=\"width:100%;color:#FFF200;vertical-align: top;\">".addslashes($resource->message).'<br><i>'.$resource->selector."</i></p></div>'+document.body.innerHTML;
 
                 });
 
