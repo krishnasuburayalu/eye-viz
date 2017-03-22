@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Execution;
+// use Illuminate\Console\Application as Artisan;
+use Artisan;
 
 class ExecutionController extends Controller
 {
@@ -18,7 +20,16 @@ class ExecutionController extends Controller
       if(!$execution){
         return false;
       }
-      print_r($execution)
+      print_r($execution);
 
+    }
+
+    public function ExecuteTest($id=null){
+      if(!$id){
+        return false;
+      }
+
+      Artisan::call('at:run', ['site_id'=>$id]);
+      return back();
     }
 }

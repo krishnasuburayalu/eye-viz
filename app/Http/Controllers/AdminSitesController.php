@@ -74,8 +74,10 @@
 	        | @showIf 	   = If condition when action show. Use field alias. e.g : [id] == 1
 	        | 
 	        */
+	        
 	        $this->addaction = array();
 
+			$this->addaction[] = ['label'=>'Run Test','icon'=>'fa fa-play','color'=>'info','url'=>CRUDBooster::mainpath('test').'/[id]'];
 
 	        /* 
 	        | ---------------------------------------------------------------------- 
@@ -211,7 +213,6 @@
 	    */
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
-
 	    }
 
 	    /* 

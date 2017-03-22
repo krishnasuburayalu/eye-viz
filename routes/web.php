@@ -14,3 +14,5 @@
 Route::get('/', function () {
     return redirect('admin');
 });
+
+Route::get('/admin/sites/test/{id}', 'ExecutionController@ExecuteTest');
