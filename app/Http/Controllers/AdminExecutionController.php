@@ -214,9 +214,7 @@
 				if ($column_index==9 && $column_value > 0 ) {
 						$column_value = '<span class="label label-info">'.$column_value.' </span>';
 				}
-				if ($column_index==1) {
-						$column_value = '<a href="test_results?&filter_column[test_results.id_execution][value]='.$column_value.'"> '.$column_value.'</a>';
-				}
+				
 				if ($column_index==4) {
 						$column_value = '<a href="test_results?filter_column[execution.notes][type]=%3D&filter_column[execution.notes][value]='.$column_value.'"> '.$column_value.'</a>';
 				}
