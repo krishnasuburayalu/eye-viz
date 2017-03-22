@@ -78,20 +78,20 @@ class ExecutionHelper extends Helper
 
                dispatch((new RunAccessibilityTests($data)));
                $url_count++;
-               //update pushed url counts to execution
-               Execution::where('id', $execution_id)->update(array('t_pushed' => $urls->count()));
-
-               //will add some dummy jobs later
-               //once all urls pushed into queue send job for stats collection
-               $data = array();
-               $data['action'] = ExecutionHelper::QUEUE_ACTION_AFTER;
-               $data['site_id'] = $sites->id;
-               $data['standard'] = $standard;
-               $data['execution_id'] = $execution_id;
-               dispatch((new RunAccessibilityTests($data)));
            }
        }
 
+       //update pushed url counts to execution
+       Execution::where('id', $execution_id)->update(array('t_pushed' => $urls->count()));
+
+       //will add some dummy jobs later
+       //once all urls pushed into queue send job for stats collection
+       $data = array();
+       $data['action'] = ExecutionHelper::QUEUE_ACTION_AFTER;
+       $data['site_id'] = $sites->id;
+       $data['standard'] = $standard;
+       $data['execution_id'] = $execution_id;
+       dispatch((new RunAccessibilityTests($data)));
        return true;
     }
 
