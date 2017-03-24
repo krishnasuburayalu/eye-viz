@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Helper;
 
 use Session;
@@ -11,6 +11,7 @@ use App\Model\Sites;
 use Carbon\Carbon;
 use Exception;
 use Storage;
+use crocodicstudio\crudbooster\helpers\CRUDBooster;
 
 use JonnyW\PhantomJs\Client;
 use JonnyW\PhantomJs\DependencyInjection\ServiceContainer;
@@ -65,6 +66,7 @@ class ExecutionHelper extends Helper
             $standard = $standard->name;
         }
         $url_count = 0;
+        CRUDBooster::sendNotification(array('content' => "Started Execution : " . $execution->notes));
        //create job array;
        foreach ($urls as $url) {
            $data = array();
@@ -75,7 +77,6 @@ class ExecutionHelper extends Helper
                $data['site_id'] = $sites->id;
                $data['standard'] = $standard;
                $data['execution_id'] = $execution_id;
-
                dispatch((new RunAccessibilityTests($data)));
                $url_count++;
            }
@@ -131,11 +132,11 @@ class ExecutionHelper extends Helper
         }
       //get standard form job
       $command = '/usr/local/bin/pa11y';
-      if($config || !empty($config)) { 
-        $command .= ' --config '.storage_path().'/app/'.$config; 
+      if($config || !empty($config)) {
+        $command .= ' --config '.storage_path().'/app/'.$config;
       }
       $command .= ' --reporter json  '.  $url;
-      
+
      $process = new Process($command);
      // $process = new Process('/usr/local/bin/pa11y --standard '. $standard .' --config'.$config.' --reporter json  '.  $url);
         $process->run();
@@ -156,15 +157,18 @@ class ExecutionHelper extends Helper
 
           //$res->screenshot = \App\Helper\ExecutionHelper::captureElement($res);
           $res->save();
+          CRUDBooster::sendNotification(array('content' => "Test Completed for: " . $url));
+
 
             $data = array();
             $data['action'] = ExecutionHelper::QUEUE_CAPTURE_SCREEN;
             $data['resource'] = $res;
             dispatch((new ScreenShotDaemon($data)));
+
         }
         Storage::delete($config);
     }
-    
+
 
     /**
      * get_execution_id create execution ID
@@ -254,13 +258,13 @@ class ExecutionHelper extends Helper
         if(!$resource){
           return false;
         }
-        
+
         $partialData = \App\Helper\ExecutionHelper::writeProcedure($resource);
 
         $location = storage_path().'/app/procs/';
-        
+
         $serviceContainer = ServiceContainer::getInstance();
-    
+
         $procedureLoader = $serviceContainer->get('procedure_loader_factory')
             ->createProcedureLoader($location);
         $client = Client::getInstance();
@@ -305,7 +309,7 @@ class ExecutionHelper extends Helper
 
                 // scrollpsn = page.evaluate(function(){
                 //     return document.querySelector(\"".$resource->selector."\").setAttribute('style', document.querySelector(\"".$resource->selector."\").getAttribute('style') + ';border-color: #FF0000; border-style: dashed; border-width: 3px;');
-                // }); 
+                // });
                 page.render('". storage_path().'/'.$imagefilename ."', {format: 'jpeg', quality: '40'});
               // }, 1000);
 
