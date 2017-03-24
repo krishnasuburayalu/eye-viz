@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/admin/sites/test/{id}', 'ExecutionController@ExecuteTest');
+Route::get('/storage/app/screenshots/{execution_id}/{site_id}/{name}', 'ScreenshotController@render');
